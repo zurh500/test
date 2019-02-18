@@ -1,177 +1,179 @@
 初始化git
-git init
-git config --global user.name ""
-git config --global user.email ""
-git config --list
+	git init
+	git config --global user.name ""
+	git config --global user.email ""
+	git config --list
+
+基本命令
+	git add 文件名            工作区 -> 暂存区
+	git commit -m '描述'      暂存区 -> git仓库
+	git status   查看状态
 
 
-git add 文件名            工作区 -> 暂存区
-git commit -m '描述'      暂存区 -> git仓库
+	注：修改了就要重新add commit
 
-git status   查看状态
+版本问题
+	git diff                     查看上次修改
+	git log                      查看所有版本（详细）
+	git log --pretty=oneline     查看所有版本
+	git reset --hard HEAD^       返回到上一个版本
+	git reset --hard 版本号id    返回到指定版本
+	git reflog                   查看历史命令
 
 
-注：修改了就要重新add commit
-
-git diff                     查看上次修改
-git log                      查看所有版本（详细）
-git log --pretty=oneline     查看所有版本
-git reset --hard HEAD^       返回到上一个版本
-git reset --hard 版本号id    返回到指定版本
-git reflog                   查看历史命令
 
 撤销修改
-git checkout --文件名        将当工作区的文件修改丢弃（还未add）
-git reset HEAD 文件名        改错了工作区并提交到暂存区了（add了）要回退到工作区
-			     	在进行git checkout --文件名 操作
-若已经提交到git库了，则需要版本回溯 返回上一版本或指定版本
+	git checkout --文件名        将当工作区的文件修改丢弃（还未add）
+	git reset HEAD 文件名        改错了工作区并提交到暂存区了（add了）要回退到工作区
+						在进行git checkout --文件名 操作
+	若已经提交到git库了，则需要版本回溯 返回上一版本或指定版本
 
 删除文件
-先删除工作区的文件（工作区和版本区不一致）：rm 文件名
-	若想继续删除暂存区文件：1、git rm 文件名 2、git commit -m '信息' 提交
-	若想恢复工作区，将误删的文件恢复到最新版：git checkout -- 文件名
+	先删除工作区的文件（工作区和版本区不一致）：rm 文件名
+		若想继续删除暂存区文件：1、git rm 文件名 2、git commit -m '信息' 提交
+		若想恢复工作区，将误删的文件恢复到最新版：git checkout -- 文件名
 
-git checkout：其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除
-	      都可以“一键还原”
+	git checkout：其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除
+			  都可以“一键还原”
 
 
 远程仓库
-git remote -v             仓库路径查询
-git remote rm origin      删除指定远程
-git remote add origin git@github.com:zurh500/xxx.git  添加远程仓库
-git push -u origin master  
+	git remote -v             仓库路径查询
+	git remote rm origin      删除指定远程
+	git remote add origin git@github.com:zurh500/xxx.git  添加远程仓库
+	git push -u origin master  
 
-git pull origin master
-git push -u -f origin master
+	git pull origin master
+	git push -u -f origin master
 
-git clone git@github.com:zurh500/xxx.git    克隆远程仓库
+	git clone git@github.com:zurh500/xxx.git    克隆远程仓库
 
 
 创建与合并分支
-git checkout -b dev        -b参数表示创建并切换dev分支
-相当于以下两条命令
-git branch dev
-git checkout dev
+	git checkout -b dev        -b参数表示创建并切换dev分支
+	相当于以下两条命令
+	git branch dev
+	git checkout dev
 
-git branch             查看当前分支
-git branch <name>      创建分支
-git checkout <name>    切换分支
-git checkout -b <name> 创建+切换分支
-git merge <name>       合并某分支到当前分支
-git branch -d <name>   删除分支
+	git branch             查看当前分支
+	git branch <name>      创建分支
+	git checkout <name>    切换分支
+	git checkout -b <name> 创建+切换分支
+	git merge <name>       合并某分支到当前分支
+	git branch -d <name>   删除分支
 
-步骤：
-1.创建并且换分支
-2.查看当前分支
-3.创建新文件 add commit
-4.切换到主分支
-5.查看文件发现没有
-6.合并某分支到当前分支
-7.查看文件发现已经存在了
-8.删除新创建的分支
+	步骤：
+	1.创建并且换分支
+	2.查看当前分支
+	3.创建新文件 add commit
+	4.切换到主分支
+	5.查看文件发现没有
+	6.合并某分支到当前分支
+	7.查看文件发现已经存在了
+	8.删除新创建的分支
 
 
 解决冲突
-当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
-解决冲突就是把Git合并失败的文件手动编辑为我们希望的内容，再提交。
-用git log --graph命令可以看到分支合并图
+	当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
+	解决冲突就是把Git合并失败的文件手动编辑为我们希望的内容，再提交。
+	用git log --graph命令可以看到分支合并图
 
-步骤
-1.git merge 新建分支名 发现出现冲突
-2.重新修改文件后add commit
-3.使用git log --graph --pretty=oneline --abbrev-commit查看分支合并图
-4.删除分支
+	步骤
+	1.git merge 新建分支名 发现出现冲突
+	2.重新修改文件后add commit
+	3.使用git log --graph --pretty=oneline --abbrev-commit查看分支合并图
+	4.删除分支
 
 
 分支管理策略
-通常，合并分支时，如果可能，Git会用Fast forward模式，但这种模式下，删除分支后，会丢掉分支信息。
+	通常，合并分支时，如果可能，Git会用Fast forward模式，但这种模式下，删除分支后，会丢掉分支信息。
 
-如果要强制禁用Fast forward模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息。
+	如果要强制禁用Fast forward模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息。
 
-下面我们实战一下--no-ff方式的git merge：
+	下面我们实战一下--no-ff方式的git merge：
 
-首先，仍然创建并切换dev分支：
+	首先，仍然创建并切换dev分支：
 
-$ git checkout -b dev
-Switched to a new branch 'dev'
-修改readme.txt文件，并提交一个新的commit：
+	$ git checkout -b dev
+	Switched to a new branch 'dev'
+	修改readme.txt文件，并提交一个新的commit：
 
-$ git add readme.txt 
-$ git commit -m "add merge"
-[dev f52c633] add merge
- 1 file changed, 1 insertion(+)
-现在，我们切换回master：
+	$ git add readme.txt 
+	$ git commit -m "add merge"
+	[dev f52c633] add merge
+	 1 file changed, 1 insertion(+)
+	现在，我们切换回master：
 
-$ git checkout master
-Switched to branch 'master'
-准备合并dev分支，请注意--no-ff参数，表示禁用Fast forward：
+	$ git checkout master
+	Switched to branch 'master'
+	准备合并dev分支，请注意--no-ff参数，表示禁用Fast forward：
 
-$ git merge --no-ff -m "merge with no-ff" dev
-Merge made by the 'recursive' strategy.
- readme.txt | 1 +
- 1 file changed, 1 insertion(+)
-因为本次合并要创建一个新的commit，所以加上-m参数，把commit描述写进去。
+	$ git merge --no-ff -m "merge with no-ff" dev
+	Merge made by the 'recursive' strategy.
+	 readme.txt | 1 +
+	 1 file changed, 1 insertion(+)
+	因为本次合并要创建一个新的commit，所以加上-m参数，把commit描述写进去。
 
-合并后，我们用git log看看分支历史：
+	合并后，我们用git log看看分支历史：
 
-$ git log --graph --pretty=oneline --abbrev-commit
-*   e1e9c68 (HEAD -> master) merge with no-ff
-|\  
-| * f52c633 (dev) add merge
-|/  
-*   cf810e4 conflict fixed
-...
-可以看到，不使用Fast forward模式，merge后就像这样：
+	$ git log --graph --pretty=oneline --abbrev-commit
+	*   e1e9c68 (HEAD -> master) merge with no-ff
+	|\  
+	| * f52c633 (dev) add merge
+	|/  
+	*   cf810e4 conflict fixed
+	...
+	可以看到，不使用Fast forward模式，merge后就像这样：
 
-git-no-ff-mode
+	git-no-ff-mode
 
 分支策略
 
-在实际开发中，我们应该按照几个基本原则进行分支管理：
-首先，master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；
-那在哪干活呢？干活都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；
-你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上合并就可以了。
+	在实际开发中，我们应该按照几个基本原则进行分支管理：
+	首先，master分支应该是非常稳定的，也就是仅用来发布新版本，平时不能在上面干活；
+	那在哪干活呢？干活都在dev分支上，也就是说，dev分支是不稳定的，到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；
+	你和你的小伙伴们每个人都在dev分支上干活，每个人都有自己的分支，时不时地往dev分支上合并就可以了。
 
-Git分支十分强大，在团队开发中应该充分应用。
+	Git分支十分强大，在团队开发中应该充分应用。
 
-合并分支时，加上--no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而fast forward合并就看不出来曾经做过合并。
+	合并分支时，加上--no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而fast forward合并就看不出来曾经做过合并。
 
-当手头工作没有完成时，先把工作现场git stash一下，然后去修复bug
-修复bug时，我们会通过创建新的bug分支进行修复，然后合并，最后删除
+	当手头工作没有完成时，先把工作现场git stash一下，然后去修复bug
+	修复bug时，我们会通过创建新的bug分支进行修复，然后合并，最后删除
 
-git stash             保存工作现场
-git stash apply       恢复，但是恢复后，stash内容并不删除，你需要用git stash drop来删除；
-git stash pop         恢复的同时把stash内容也删了，回到工作现场
-git stash list        查看
-
-
-
-开发一个新feature，最好新建一个分支
-
-git branch -D 分支名     强行删除分支
+	git stash             保存工作现场
+	git stash apply       恢复，但是恢复后，stash内容并不删除，你需要用git stash drop来删除；
+	git stash pop         恢复的同时把stash内容也删了，回到工作现场
+	git stash list        查看
 
 
 
-多人协作的工作模式通常是这样：
+	开发一个新feature，最好新建一个分支
 
-首先，可以试图用git push origin <branch-name>推送自己的修改；
-如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
-如果合并有冲突，则解决冲突，并在本地提交；
-没有冲突或者解决掉冲突后，再用git push origin <branch-name>推送就能成功！
-如果git pull提示no tracking information，则说明本地分支和远程分支的链接关系没有创建，用命令git branch --set-upstream-to <branch-name> origin/<branch-name>。
-这就是多人协作的工作模式，一旦熟悉了，就非常简单。
+	git branch -D 分支名     强行删除分支
 
 
 
-git remote -v         查看远程库信息 本地新建的分支如果不推送到远程，对其他人就是不可见的
+	多人协作的工作模式通常是这样：
 
-git push origin branch-name    			从本地推送分支
-git pull        				如果推送失败，先抓取远程的新提交
-git checkout -b branch-name origin/branch-name  在本地创建和远程分支对应的分支，
-						本地和远程分支的名称最好一致
-git branch --set-upstream branch-name origin/branch-name
-						建立本地分支和远程分支的关联
-git pull                                        从远程抓取分支，如果有冲突，要先处理冲突
+	首先，可以试图用git push origin <branch-name>推送自己的修改；
+	如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+	如果合并有冲突，则解决冲突，并在本地提交；
+	没有冲突或者解决掉冲突后，再用git push origin <branch-name>推送就能成功！
+	如果git pull提示no tracking information，则说明本地分支和远程分支的链接关系没有创建，用命令git branch --set-upstream-to <branch-name> origin/<branch-name>。
+	这就是多人协作的工作模式，一旦熟悉了，就非常简单。
+
+
+远程仓库
+	git remote -v         查看远程库信息 本地新建的分支如果不推送到远程，对其他人就是不可见的
+
+	git push origin branch-name    			从本地推送分支
+	git pull        				如果推送失败，先抓取远程的新提交
+	git checkout -b branch-name origin/branch-name  在本地创建和远程分支对应的分支，
+							本地和远程分支的名称最好一致
+	git branch --set-upstream branch-name origin/branch-name
+							建立本地分支和远程分支的关联
+	git pull                                        从远程抓取分支，如果有冲突，要先处理冲突
 
 
 
@@ -182,35 +184,35 @@ rebase的目的是使得我们在查看历史提交的变化时更容易，因�
 
 
 创建标签
-git tag <tagname>                 用于新建一个标签，默认为HEAD，也可以指定一个commit id
-git tag -a <tagname> -m " "       可以指定标签信息
-git tag                           可以查看所有标签
+	git tag <tagname>                 用于新建一个标签，默认为HEAD，也可以指定一个commit id
+	git tag -a <tagname> -m " "       可以指定标签信息
+	git tag                           可以查看所有标签
 
 操作标签
-git push origin <tagname>              可以推送一个本地标签
-git push origin --tags                 可以推送全部未推送过的本地标签
-git tag -d <tagname>                   可以删除一个本地标签（先删本地）
-git push origin :refs/tags/<tagname>   可以删除一个远程标签
+	git push origin <tagname>              可以推送一个本地标签
+	git push origin --tags                 可以推送全部未推送过的本地标签
+	git tag -d <tagname>                   可以删除一个本地标签（先删本地）
+	git push origin :refs/tags/<tagname>   可以删除一个远程标签
 
 
 
-忽略特殊文件
-https://github.com/github/gitignore  各类配置文件
-忽略某些文件时，需要编写.gitignore
-.gitignore文件本身要放到版本库里，并且可以对.gitignore做版本管理
+	忽略特殊文件
+	https://github.com/github/gitignore  各类配置文件
+	忽略某些文件时，需要编写.gitignore
+	.gitignore文件本身要放到版本库里，并且可以对.gitignore做版本管理
 
 
 
 配置别名
-git config --global alias.co checkout
-git config --global alias.ci commit
-git config --global alias.br branch
+	git config --global alias.co checkout
+	git config --global alias.ci commit
+	git config --global alias.br branch
 
 
 查看配置
-cat .git/config             当前仓库
-cat .gitconfig              当前用户（需要到用户主目录）
-git config --global --list  查看用户的配置信息
+	cat .git/config             当前仓库
+	cat .gitconfig              当前用户（需要到用户主目录）
+	git config --global --list  查看用户的配置信息
 
 
 

@@ -737,44 +737,79 @@ Spring的事务
 
 
 	基于注解的配置
-	<!-- 配置事务管理器 -->
-	<bean id="transactionManager" 
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<constructor-arg ref="dataSource"></constructor-arg>
-	</bean>
+		使用@Thansactional 注解
 		
-	
-	<!-- 启用事务注解 -->
-	<tx:annotation-driven transaction-manager="transactionManager"/>
-	
+		
+		<!-- 配置事务管理器 -->
+		<bean id="transactionManager" 
+			class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			<constructor-arg ref="dataSource"></constructor-arg>
+		</bean>
+			
+		
+		<!-- 启用事务注解 -->
+		<tx:annotation-driven transaction-manager="transactionManager"/>
+		
+		
+		添加事务注解
+			1.使用 propagation 指定事务的传播行为, 即当前的事务方法被另外一个事务方法调用时
+			如何使用事务, 默认取值为 REQUIRED, 即使用调用方法的事务
+			REQUIRES_NEW: 事务自己的事务, 调用的事务方法的事务被挂起. 
+			2.使用 isolation 指定事务的隔离级别, 最常用的取值为 READ_COMMITTED
+			3.默认情况下 Spring 的声明式事务对所有的运行时异常进行回滚. 也可以通过对应的
+			属性进行设置. 通常情况下去默认值即可. 
+			4.使用 readOnly 指定事务是否为只读. 表示这个事务只读取数据但不更新数据, 
+			这样可以帮助数据库引擎优化事务. 若真的事一个只读取数据库值的方法, 应设置 readOnly=true
+			5.使用 timeout 指定强制回滚之前事务可以占用的时间.  
+	//	@Transactional(propagation=Propagation.REQUIRES_NEW, 
+	//			isolation=Isolation.READ_COMMITTED,
+	//			noRollbackFor={UserAccountException.class}) //对那些异常进行回滚 默认的通常不配置
+		@Transactional(propagation=Propagation.REQUIRES_NEW,
+				isolation=Isolation.READ_COMMITTED,
+				readOnly=false,
+				timeout=3)
+		
 			
 	基于xml
 		<!-- 1、配置事务管理器 -->
-	<bean id="transactionManager" 
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource"></property>
-	</bean>
-	
-	<!-- 2、 配置事务属性 -->
-	<tx:advice id="txAdvice" transaction-manager="transactionManager">
-		<tx:attributes>
-			<!-- 根据方法名指定事务的属性 -->
-			<tx:method name="purchase" propagation="REQUIRES_NEW"/>
-			<tx:method name="get*" read-only="true"/>
-			<tx:method name="find*" read-only="true"/>
-			<tx:method name="*"/>
-		</tx:attributes>
-	</tx:advice>
-	
-	<!-- 3. 配置事务切入点, 以及把事务切入点和事务属性关联起来 -->
-	<aop:config>
-		<aop:pointcut expression="execution(* com.atguigu.spring.tx.xml.service.*.*(..))" 
-			id="txPointCut"/>
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"/>	
-	</aop:config>
+		<bean id="transactionManager" 
+			class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			<property name="dataSource" ref="dataSource"></property>
+		</bean>
+		
+		<!-- 2、 配置事务属性 -->
+		<tx:advice id="txAdvice" transaction-manager="transactionManager">
+			<tx:attributes>
+				<!-- 根据方法名指定事务的属性 -->
+				<tx:method name="purchase" propagation="REQUIRES_NEW"/>
+				<tx:method name="get*" read-only="true"/>
+				<tx:method name="find*" read-only="true"/>
+				<tx:method name="*"/>
+			</tx:attributes>
+		</tx:advice>
+		
+		<!-- 3. 配置事务切入点, 以及把事务切入点和事务属性关联起来 -->
+		<aop:config>
+			<aop:pointcut expression="execution(* com.atguigu.spring.tx.xml.service.*.*(..))" 
+				id="txPointCut"/>
+			<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"/>	
+		</aop:config>
 	
 			
-			
+	事务的传播性为
+		REQUIRED：默认。如果有事务在运行，当前方法就在这个事务内运行，否则就启动一个新的事务并在自己的事务内运行
+		REQUIRED_NEW：当前方法必须启动新事务，并在它自己的事务内运行，如果有事务正运行，应将它挂起
+	
+	事务的隔离级别
+		DEFAULT：使用底层数据库的默认事务隔离级别
+		READ_UNCOMMITED：不能解决任何问题
+		READ_COMMITED：解决了脏读.  不可重复读和幻读仍会出现
+		REPEATABLE_READ：解决了脏读、不可重复读的问题，但是幻读的问题还是无法解决
+		SERIALIZABLE：都可以避免 需要加锁
+	
+	
+		Oracle 支持的 2 种事务隔离级别：READ_COMMITED , SERIALIZABLE
+		Mysql 支持 4 中事务隔离级别.默认REPEATABLE_READ select @@tx_isolation; 
 			
 			
 			
